@@ -1,0 +1,9 @@
+/* MOVIE */
+
+.movie__poster {
+  object-fit: cover;
+}
+
+.movie__trailer {
+  border: 0;
+}

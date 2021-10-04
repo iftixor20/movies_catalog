@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Movies List</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/main.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+    crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="mt-3 mb-5 d-flex">
+      <h1 class="text-center flex-grow-1">HydraMovies</h1>
+      <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#watchlistModal">
+        <img src="./img/icon-bookmark.svg" width="24" height="24" alt="Bookmarks collection">
+      </button>
+    </div>
+
+    <form class="filters row mx-0 mb-3" method="GET" action="https://echo.htmlacademy.ru">
+      <div class="col-3 ps-0">
+        <div class="input-group">
+          <input class="form-control" type="search" name="q" placeholder="Search..." aria-label="Search">
+          <select class="form-select w-auto flex-grow-0" name="categories">
+            <option value="all" selected>All</option>
+            <option value="Action">Action</option>
+            <option value="Adventure">Adventure</option>
+            <option value="Animation">Animation</option>
+            <option value="Biography">Biography</option>
+            <option value="Comedy">Comedy</option>
+            <option value="Crime">Crime</option>
+            <option value="Documentary">Documentary</option>
+            <option value="Drama">Drama</option>
+            <option value="Family">Family</option>
+            <option value="Fantasy">Fantasy</option>
+            <option value="History">History</option>
+            <option value="Horror">Horror</option>
+            <option value="Music">Music</option>
+            <option value="Musical">Musical</option>
+            <option value="Mystery">Mystery</option>
+            <option value="News">News</option>
+            <option value="Reality-TV">Reality-TV</option>
+            <option value="Romance">Romance</option>
+            <option value="Sci-Fi">Sci-Fi</option>
+            <option value="Sport">Sport</option>
+            <option value="Thriller">Thriller</option>
+            <option value="Uncategorized">Uncategorized</option>
+            <option value="War">War</option>
+            <option value="Western">Western</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="col-3">
+        <div class="input-group">
+          <span class="input-group-text">Filter</span>
+          <select class="form-select" name="filter">
+            <option value="all">All</option>
+            <option value="a-z">A-Z</option>
+            <option value="z-a">Z-A</option>
+            <option value="rating">Rating</option>
+            <option value="year">Release date</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="col-3">
+        <div class="input-group">
+          <span class="input-group-text">Year</span>
+          <input type="number" min="1900" max="2020" class="form-control" placeholder="From.." name="from_year"
+            aria-label="Starting year">
+          <input type="number" min="1900" max="2020" class="form-control" placeholder="To.." name="to_year"
+            aria-label="Ending year">
+        </div>
+      </div>
+
+      <div class="col-3 pe-0">
+        <div class="input-group">
+          <span class="input-group-text">IMDb rating (min)</span>
+          <input class="form-control" type="number" min="0" max="10" step="0.1" name="rating"
+            aria-label="Minimal IMDb rating">
+        </div>
+      </div>
+
+      <div class="col mt-2 d-flex justify-content-end px-0">
+        <button class="btn btn-info text-white" type="submit">Get results</button>
+      </div>
+    </form>
+
+    <div class="movies row"></div>
+
+    <nav aria-label="Movies navigation">
+      <ul class="pagination justify-content-end">
+        <li class="page-item">
+          <button class="pagination__control pagination__control--prev page-link" aria-label="Previous" data-page-count="-1">
+            <span aria-hidden="true">&laquo;</span>
+          </button>
+        </li>
+        <li class="page-item active">
+          <button class="pagination__link page-link">1</button>
+        </li>
+        <li class="page-item">
+          <button class="pagination__link page-link">2</button>
+        </li>
+        <li class="page-item">
+          <button class="pagination__link page-link">3</button>
+        </li>
+        <li class="page-item">
+          <button class="pagination__link page-link">4</button>
+        </li>
+        <li class="page-item">
+          <button class="pagination__link page-link">5</button>
+        </li>
+        <li class="page-item">
+          <button class="pagination__control pagination__control--next page-link" aria-label="Next" data-page-count="1">
+            <span aria-hidden="true">&raquo;</span>
+          </button>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+
+  <!-- MOVIE-MODAL -->
+
+  <div class="modal fade" id="movieModal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
+    <div class="modal-xl modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header flex-column flex-sm-row align-items-start">
+          <h3 class="movie__title card-title h4 mr-3 mb-sm-0"></h3>
+
+          <div class="movie__info d-flex flex-shrink-0">
+            <div class="movie__info-item d-inline-flex align-items-center fw-bold me-3" aria-label="Imdb rating">
+              <img class="me-1" src="./img/icon-star.svg" width="24" height="24" alt="" aria-hidden="true">
+              <span class="movie__info-rating"></span>
+            </div>
+
+            <div class="movie__info-item d-inline-flex align-items-center fw-bold me-3" aria-label="Release year">
+              <img class="me-1" src="./img/icon-calendar.svg" width="24" height="24" alt="" aria-hidden="true">
+              <span class="movie__info-year"></span>
+            </div>
+
+            <div class="movie__info-item d-inline-flex align-items-center fw-bold" aria-label="Duration">
+              <img class="me-1" src="./img/icon-clock.svg" width="24" height="24" alt="" aria-hidden="true">
+              <span class="movie__info-duration"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-body row mx-0">
+          <div class="ratio-16x9 col-lg-6">
+            <iframe class="movie__trailer w-100" height="400" title="YouTube video player"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen loading="lazy"></iframe>
+          </div>
+          <div class="d-flex flex-column col-lg-6">
+            <p class="movie__genres fw-bold"></p>
+            <p class="movie__summary flex-grow-1"></p>
+            <div class="d-flex">
+              <a class="movie__imdb-link link-info d-inline-flex align-items-center me-3" target="_blank">
+                <span class="me-2">Show on IMDb</span>
+                <img src="./img/icon-external-link.svg" width="20" height="20" alt="" aria-hidden="true">
+              </a>
+              <button class="movie__bookmark btn btn-primary d-inline-flex align-items-center" type="button">
+                <img class="me-1" style="pointer-events: none;" src="./img/icon-bookmark-add.svg" width="24" height="24"
+                  alt="" aria-hidden="true">
+                <span style="pointer-events: none;">Add to bookmark</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WATCHLIST-MODAL -->
+
+  <div class="watchlist-modal modal fade" id="watchlistModal" tabindex="-1" aria-labelledby="watchlistModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="watchlistModalLabel">Watchlist</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <ul class="watchlist-modal__list list-group"></ul>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- TEMPLATES -->
+
+  <template id="tempMovie">
+    <div class="movies__item col-md-6 mb-3">
+      <div class="movie card h-100">
+        <img class="movie__poster card-img-top"
+          src="https://image.tmdb.org/t/p/original/12ijlLGQ5QQGZhhzsevfcIFCahT.jpg" height="400">
+        <div class="card-body d-flex flex-column">
+          <h3 class="movie__title card-title h4 mb-3 text-truncate"></h3>
+
+          <div class="movie__info d-flex mb-3">
+            <div class="movie__info-item d-inline-flex align-items-center fw-bold me-3" aria-label="Imdb rating">
+              <img class="me-1" src="./img/icon-star.svg" width="24" height="24" alt="" aria-hidden="true">
+              <span class="movie__info-rating"></span>
+            </div>
+
+            <div class="movie__info-item d-inline-flex align-items-center fw-bold me-3" aria-label="Release year">
+              <img class="me-1" src="./img/icon-calendar.svg" width="24" height="24" alt="" aria-hidden="true">
+              <span class="movie__info-year"></span>
+            </div>
+
+            <div class="movie__info-item d-inline-flex align-items-center fw-bold" aria-label="Duration">
+              <img class="me-1" src="./img/icon-clock.svg" width="24" height="24" alt="" aria-hidden="true">
+              <span class="movie__info-duration"></span>
+            </div>
+          </div>
+
+          <p class="movie__genres fw-bold flex-grow-1"></p>
+
+          <div>
+            <a class="movie__more-link btn btn-primary d-inline-flex align-items-center me-2" href="#movieModal"
+              data-bs-toggle="modal">
+              <img class="me-1" style="pointer-events: none;" src="./img/icon-info.svg" width="24" height="24" alt=""
+                aria-hidden="true">
+              <span style="pointer-events: none;">More info</span>
+            </a>
+
+            <button class="movie__bookmark btn btn-primary d-inline-flex align-items-center" type="button">
+              <img class="me-1" style="pointer-events: none;" src="./img/icon-bookmark-add.svg" width="24" height="24"
+                alt="" aria-hidden="true">
+              <span style="pointer-events: none;">Add to bookmark</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <script src="./js/movies.js"></script>
+  <script src="./js/main.js"></script>
+</body>
+
+</html>
